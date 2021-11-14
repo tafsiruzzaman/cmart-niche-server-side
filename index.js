@@ -30,6 +30,11 @@ async function run() {
         const cars = await cursor.toArray();
         res.send(cars);
       })
+      app.get('/reviews', async (req, res) => {
+        const cursor = reviewCollection.find({});
+        const reviews = await cursor.toArray();
+        res.send(reviews);
+      })
 
       app.get('/homecars', async (req, res) => {
         const cursor = carCollection.find({});
@@ -74,7 +79,6 @@ async function run() {
       });
 
       app.post('/reviews', async (req, res) => {
-        console.log('hit the api')
         const newReview = req.body;
         const result = await reviewCollection.insertOne(newReview);
         res.json(result);
