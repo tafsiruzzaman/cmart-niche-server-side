@@ -30,6 +30,13 @@ async function run() {
         const cars = await cursor.toArray();
         res.send(cars);
       })
+
+      app.get('/all-bookings', async (req, res) => {
+        const cursor = allBookings.find({});
+        const bookings = await cursor.toArray();
+        res.send(bookings);
+      })
+
       app.get('/reviews', async (req, res) => {
         const cursor = reviewCollection.find({});
         const reviews = await cursor.toArray();
@@ -62,7 +69,6 @@ async function run() {
       })
 
       app.get('/all-bookings/:email', async (req, res) => {
-        console.log("hit the api")
         const email = req.params.email;
         const query = {email: email};
         const cursor = allBookings.find(query);
@@ -72,9 +78,14 @@ async function run() {
 
       // Post API
 
-      app.post('/allBookings', async (req, res) => {
+      app.post('/all-bookings', async (req, res) => {
         const newBooking = req.body;
         const result = await allBookings.insertOne(newBooking);
+        res.json(result);
+      });
+      app.post('/all-cars', async (req, res) => {
+        const newCar = req.body;
+        const result = await carCollection.insertOne(newCar);
         res.json(result);
       });
 
@@ -91,20 +102,19 @@ async function run() {
       });
 
       //UPDATE API
-    //   app.put('/allBookings/:id', async (req, res) => {
-    //     const id = req.params.id;
-    //     const bookingUpdate = req.body;
-    //     const filter = { _id: ObjectId(id) };
-    //     const options = { upsert: true };
-    //     const updateDoc = {
-    //         $set: {
-    //             status: bookingUpdate.status
-    //         },
-    //     };
-    //     const result = await allBookings.updateOne(filter, updateDoc, options)
-    //     console.log('updating', id)
-    //     res.json(result)
-    //   })
+      app.put('/all-bookings/:id', async (req, res) => {
+        const id = req.params.id;
+        const bookingUpdate = req.body;
+        const filter = { _id: ObjectId(id) };
+        const options = { upsert: true };
+        const updateDoc = {
+            $set: {
+                status: bookingUpdate.status
+            },
+        };
+        const result = await allBookings.updateOne(filter, updateDoc, options);
+        res.json(result)
+      })
 
       app.put('/users', async (req, res) => {
         const user = req.body;
