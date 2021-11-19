@@ -109,10 +109,36 @@ async function run() {
         const options = { upsert: true };
         const updateDoc = {
             $set: {
-                status: bookingUpdate.status
+              status: bookingUpdate.status
             },
         };
         const result = await allBookings.updateOne(filter, updateDoc, options);
+        res.json(result)
+      })
+
+      app.put('/all-cars/:id', async (req, res) => {
+        const id = req.params.id;
+        const carUpdate = req.body;
+        const filter = { _id: ObjectId(id) };
+        const options = { upsert: true };
+        const updateDoc = {
+          $set: {
+            colour: carUpdate.colour,
+            description: carUpdate.description,
+            fuelType: carUpdate.fuelType,
+            img: carUpdate.img,
+            location: carUpdate.location,
+            manufacturerYear: carUpdate.manufacturerYear,
+            mileage: carUpdate.mileage,
+            mode: carUpdate.mode,
+            name: carUpdate.name,
+            price: carUpdate.price,
+            ratting: carUpdate.ratting,
+            review: carUpdate.review,
+            type: carUpdate.type
+          },
+        };
+        const result = await carCollection.updateOne(filter, updateDoc, options);
         res.json(result)
       })
 
@@ -138,6 +164,13 @@ async function run() {
         const id = req.params.id;
         const query = { _id: ObjectId(id) };
         const result = await allBookings.deleteOne(query);
+        res.json(result);
+      })
+
+      app.delete('/all-cars/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const result = await carCollection.deleteOne(query);
         res.json(result);
       })
      
